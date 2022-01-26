@@ -1,59 +1,47 @@
-<script>
+<script setup>
 import { ref, onMounted } from "vue";
-export default {
-  name: "NavBar",
-  setup() {
-    const scrolledNav = ref(null);
-    const mobile = ref(null);
-    const mobileNav = ref(null);
-    const windowWidth = ref(null);
 
-    const routes = [
-      { path: "Home", text: "Home" },
-      { path: "", text: "About" },
-      { path: "", text: "Portfolio" },
-      { path: "", text: "Contact" },
-    ];
-    function toggleMobileNav() {
-      mobileNav.value = !mobileNav.value;
-    }
+const scrolledNav = ref(null);
+const mobile = ref(null);
+const mobileNav = ref(null);
+const windowWidth = ref(null);
 
-    function updateScroll() {
-      const scrollPosition = window.scrollY;
-      if (scrollPosition > 50) {
-        scrolledNav.value = true;
-        return;
-      }
-      scrolledNav.value = false;
-    }
+const routes = [
+  { path: "Home", text: "Home" },
+  { path: "", text: "About" },
+  { path: "", text: "Portfolio" },
+  { path: "", text: "Contact" },
+];
 
-    function checkScreen() {
-      windowWidth.value = window.innerWidth;
-      if (windowWidth.value <= 750) {
-        mobile.value = true;
-        return;
-      }
-      mobile.value = false;
-      mobileNav.value = false;
-    }
-    window.addEventListener("resize", checkScreen);
-    checkScreen();
+function toggleMobileNav() {
+  mobileNav.value = !mobileNav.value;
+}
 
-    onMounted(() => {
-      window.addEventListener("scroll", updateScroll);
-    });
+function updateScroll() {
+  const scrollPosition = window.scrollY;
+  if (scrollPosition > 50) {
+    scrolledNav.value = true;
+    return;
+  }
+  scrolledNav.value = false;
+}
 
-    return {
-      scrolledNav,
-      mobile,
-      mobileNav,
-      windowWidth,
-      routes,
-      toggleMobileNav,
-      checkScreen,
-    };
-  },
-};
+function checkScreen() {
+  windowWidth.value = window.innerWidth;
+  if (windowWidth.value <= 750) {
+    mobile.value = true;
+    return;
+  }
+  mobile.value = false;
+  mobileNav.value = false;
+}
+
+window.addEventListener("resize", checkScreen);
+checkScreen();
+
+onMounted(() => {
+  window.addEventListener("scroll", updateScroll);
+});
 </script>
 
 <template>
@@ -63,11 +51,13 @@ export default {
         <img src="../../assets/logo.png" alt="" />
       </div>
       <ul v-show="!mobile" class="navigation">
-        <li v-for="(route, index) in routes" :key="index">
-          <router-link class="link" :to="{ name: route.path }">
-            {{ route.text }}
-          </router-link>
-        </li>
+        <template v-for="(route, index) in routes" :key="index">
+          <li>
+            <router-link class="link" :to="{ name: route.path }">
+              {{ route.text }}
+            </router-link>
+          </li>
+        </template>
       </ul>
       <div class="icon">
         <i
